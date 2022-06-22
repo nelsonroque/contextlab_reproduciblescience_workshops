@@ -24,9 +24,9 @@ look forward to training the next generation of scientists on code-based methods
   - ***Format***: Live, with recordings available for later viewing.
   - ***Register***: Registration open until July 6th - [click here to register](https://forms.office.com/r/fY5mCWiCLs)
   - ***Materials***: 
-    - Data: see [`data`]('data') folder of this repository.
-    - Slides: see [`slides`]('slides') folder of this repository.
-    - Code: see [`scripts`]('scripts') folder of this repository.
+    - Data: see [`data`](data) folder of this repository.
+    - Slides: see [`slides`](slides) folder of this repository.
+    - Code: see [`scripts`](scripts) folder of this repository.
     - Textbook: [Click here for a web-based textbook to accompany this workshop](https://nelsonroque.github.io/contextlab_introdatascience_webcourse/index.html)
 
 ## Before the Workshop
