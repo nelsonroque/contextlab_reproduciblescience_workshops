@@ -3,11 +3,12 @@
 ## Before the Workshop
 
   1. Install R
-    - Download [R](https://cran.r-project.org/)
+    - [Download R](https://cran.r-project.org/)
   2. Install RStudio
-    - Download [RStudio](https://www.rstudio.com/products/rstudio/download/)
+    - [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
   3. Install packages for various analyses
-    ```{r}
+  
+    ```
     install.packages(c('tidyverse', 'devtools', 'readr', 'tidytext', 'textdata',
     'topicmodels', 'wordcloud', 'ggwordcloud'))
     ```
