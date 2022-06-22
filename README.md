@@ -22,6 +22,7 @@ look forward to training the next generation of scientists on code-based methods
 
   - ***Location***: In person at UCF; in PSY301Q
   - ***Format***: Live, with recordings available for later viewing.
+  - ***Regiser***: Registration open until July 6th - [click here to register](https://forms.office.com/r/fY5mCWiCLs)
 
 ## Before the Workshop
 
