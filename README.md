@@ -1,4 +1,4 @@
-# Reproducible Science Workshops
+# Introduction to Reproducible Science: A 3-day Summer Workshop
 
   - ***Author:*** Nelson Roque, PhD
   - [nelson.roque@ucf.edu](nelson.roque@ucf.edu)
@@ -43,10 +43,6 @@ look forward to training the next generation of scientists on code-based methods
   - Develop a code-only pipeline to allow reproducibility of data prep and analyses.
   - Develop a long-term learning plan for practicing reproducible science tools and techniques.
 
-## Submit your questions
-
-Do you have any questions about the workshop or related content? [Submit your questions here](https://forms.office.com/r/WDdz0yTTKa)
-
 ## Workshop Schedule
  
   - Intro to Reproducible Science: July 6, 8, 11th, 2022; 11am to 2pm
@@ -77,6 +73,10 @@ Do you have any questions about the workshop or related content? [Submit your qu
       - Interacting with APIs and JSON data
         - Skill 4: querying API for results and data aggregation
       - Closing Discussion & Q/A
+
+## Submit your questions
+
+Do you have any questions about the workshop or related content? [Submit your questions here](https://forms.office.com/r/WDdz0yTTKa)
 
 ## Resources
 
