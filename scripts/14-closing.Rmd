@@ -1,0 +1,18 @@
+# Closing & Acknowledgements
+
+## Thank you
+
+Thank you for your time and engagement in learning via this webcourse. I hope you've learned a few useful skills that you can continue to develop over time.
+
+## Acknowledgments
+
+I want to thank you a number of people who made this possible:
+
+  - My wife, daughter
+  - Dr. Mark Neider
+  - Dr. Florian Jentsch
+  - Context Lab students
+
+## Questions, Comments, Feedback?
+
+Feel free to email me at [nelson.roque@ucf.edu](nelson.roque@ucf.edu) if you have any questions, comments, or feedback.
