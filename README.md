@@ -4,9 +4,15 @@
   - [nelson.roque@ucf.edu](nelson.roque@ucf.edu)
   - Director of the Context Lab at University of Central Florida
 
-## Intention of this Web Course
+-----
 
-To train the next-generation of scientists to work with data - regardless of the type.
+## Intentions of this Book and Web Course
+
+  - To train the next-generation of scientists to work with data - regardless of the type, format, or volume.
+  - Make available a set of open-source materials to learn how to engage in reproducible science, leveraging code-based techniques.
+  - This repository is intended to house various sample workflows, and code snippets, to support research + data science activities.
+
+-----
 
 ## Background
 
