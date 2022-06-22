@@ -1,5 +1,28 @@
 # Reproducible Science Workshops
 
+  - ***Author:*** Nelson Roque, PhD
+  - [nelson.roque@ucf.edu](nelson.roque@ucf.edu)
+  - Director of the Context Lab at University of Central Florida
+
+## Intention of this Web Course
+
+To train the next-generation of scientists to work with data - regardless of the type.
+
+## Background
+
+A reproducibility crisis (Ioannidis, 2005; Open Science Collaboration, 2015) has emerged as a threat to the scientific
+enterprise. Over the last decade I've engaged in learning opportunities to become proficient across topics including
+data wrangling and modeling of text, image, video, and eye-tracking data, as well as more recently sensor data, and
+look forward to training the next generation of scientists on code-based methods to apply in their research.
+
+  - Ioannidis, John P A. 2005. “Why Most Published Research Findings Are False.” PLoS Medicine 2 (8): e124.doi:10.1371/journal.pmed.0020124.
+  - Open Science Collaboration. 2015. “Estimating the Reproducibility of Psychological Science.” Science 349 (6251):aac4716–aac4716. doi:10.1126/science.aac4716.
+
+## Workshop Format
+
+  - ***Location***: In person at UCF; in PSY301Q
+  - ***Format***: Live, with recordings available for later viewing.
+
 ## Before the Workshop
 
   1. Install R
@@ -7,23 +30,26 @@
   2. Install RStudio
     - [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
   3. Install packages for various analyses
-  
+
     ```
     install.packages(c('tidyverse', 'devtools', 'readr', 'tidytext', 'textdata',
     'topicmodels', 'wordcloud', 'ggwordcloud'))
     ```
 
+## Learning Objectives
+
+  - Describe various tools and techniques supportive of open and reproducible science.
+  - List and describe the FAIR Principles (https://www.go-fair.org/fair-principles)
+  - Develop a code-only pipeline to allow reproducibility of data prep and analyses.
+  - Develop a long-term learning plan for practicing reproducible science tools and techniques.
+
+## Submit your questions
+
+Do you have any questions about the workshop or related content? [Submit your questions here](https://forms.office.com/r/WDdz0yTTKa)
+
 ## Workshop Schedule
  
   - Intro to Reproducible Science: July 6, 8, 11th, 2022; 11am to 2pm
-    - ***Submit Questions***: 
-    - ***Location***: In person at UCF; in PSY301Q
-    - ***Format***: Live, with recordings available for later viewing.
-    - ***Objectives***
-      - Describe various tools and techniques supportive of open and reproducible science.
-      - List and describe the FAIR Principles (https://www.go-fair.org/fair-principles)
-      - Develop a code-only pipeline to allow reproducibility of data prep and analyses.
-      - Develop a long-term learning plan for practicing reproducible science tools and techniques.
     - ***Day 1***
       - What is Reproducible Science?
       - Reproducible & FAIR Data Workflows
