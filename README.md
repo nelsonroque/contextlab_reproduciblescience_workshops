@@ -22,7 +22,11 @@ look forward to training the next generation of scientists on code-based methods
 
   - ***Location***: In person at UCF; in PSY301Q
   - ***Format***: Live, with recordings available for later viewing.
-  - ***Regiser***: Registration open until July 6th - [click here to register](https://forms.office.com/r/fY5mCWiCLs)
+  - ***Register***: Registration open until July 6th - [click here to register](https://forms.office.com/r/fY5mCWiCLs)
+  - ***Materials***: 
+    - Slides: see `slides` folder of this repository.
+    - Code: see `scripts` folder of this repository.
+    - Textbook: [Click here for a web-based textbook to accompany this workshop](https://nelsonroque.github.io/contextlab_introdatascience_webcourse/index.html)
 
 ## Before the Workshop
 
