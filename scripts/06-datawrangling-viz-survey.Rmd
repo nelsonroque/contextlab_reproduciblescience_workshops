@@ -1,0 +1,140 @@
+# Data Wrangling - Special considerations with survey data
+
+## Overview
+
+In this example, we will work with the `qualtRics` package to read in Qualtrics exports, and apply minimal pre-processing.
+
+## Load data
+
+Read in survey and split StartDate into two columns for easy filtering (we don't need pilot data)
+
+```{r}
+library(qualtRics)
+library(tidyverse)
+
+# set filename of survey file
+fn = "data/demo_qualtrics_export.csv"
+
+# filter out pilot data
+PILOT_START_DATE = as.Date("2022-06-21")
+qualtrics_df <- read_survey(fn) %>%
+  separate(StartDate, into=c("dt_date", "dt_time"), sep=" ", remove=F) %>%
+  mutate(is_pilot_data = dt_date < PILOT_START_DATE) %>%
+  filter(!is_pilot_data) %>%
+  mutate(participant_id = as.character(ResponseId))
+```
+
+## Split demographics into seperate dataset
+```{r}
+df_demo = qualtrics_df %>%
+select(ResponseId, contains("demo"))
+
+knitr::kable(df_demo)# %>% kableExtra::kable_paper(.)
+```
+
+## Split out survey metadata
+```{r}
+df_metadata = qualtrics_df %>%
+select(ResponseId, contains("Date"), contains("duration"), contains("progress"))
+
+knitr::kable(df_metadata)# %>% kableExtra::kable_paper(.)
+```
+
+## Split timer data into seperate dataset
+```{r}
+df_timings = qualtrics_df %>%
+select(ResponseId, contains("timer"))
+
+knitr::kable(df_timings)# %>% kableExtra::kable_paper(.)
+
+```
+
+## Score TIPI data
+
+### Create reverse-scoring function
+
+```{r}
+reverse_code <- function(df, ques_label) {
+  out_df = df %>%
+    filter(tipi_question == ques_label) %>%
+    mutate(response_n = recode(response, 
+                               `Disagree strongly` = 7,
+                               `Disagree moderately` = 6, 
+                               `Disagree a little` = 5,
+                               `Neither agree nor disagree` = 4,
+                               `Agree a little` = 3, 
+                               `Agree moderately` = 2,
+                               `Agree strongly` = 1,
+                               .default=-999))
+  return(out_df)
+}
+```
+
+### Seperate TIPI data from main `qualtrics_df`
+
+```{r}
+# create TIPI dataset -----
+tipi_df = qualtrics_df %>%
+  select(ResponseId, contains("TIPI"), -contains("_Timer"))
+```
+
+### Transform TIPI from wide to long
+```{r}
+tipi_long = tipi_df %>%
+  pivot_longer(cols=TIPI_1:TIPI_10, names_to="tipi_question", values_to="response")
+```
+
+### Recode values
+```{r}
+tipi_long_r = tipi_long %>%
+  mutate(response_n = recode(response, 
+                             `Disagree strongly` = 1,
+                             `Disagree moderately` = 2, 
+                             `Disagree a little` = 3,
+                             `Neither agree nor disagree` = 4,
+                             `Agree a little` = 5, 
+                             `Agree moderately` = 6,
+                             `Agree strongly` = 7,
+                             .default=-999))
+
+```
+
+### Apply Reverse Coding
+
+NOTE: Extraversion: 1, 6R; Agreeableness: 2R, 7; Conscientiousness; 3, 8R; Emotional Stability: 4R, 9; Openness to Experiences: 5, 10R
+
+```{r}
+tipi_long_recode2 = reverse_code(tipi_long_r, "TIPI_2")
+tipi_long_recode4 = reverse_code(tipi_long_r, "TIPI_4")
+tipi_long_recode6 = reverse_code(tipi_long_r, "TIPI_6")
+tipi_long_recode8 = reverse_code(tipi_long_r, "TIPI_8")
+tipi_long_recode10 = reverse_code(tipi_long_r, "TIPI_10")
+
+tipi_long_nonrecoded = tipi_long_r %>%
+  filter(tipi_question %in% c("TIPI_1","TIPI_3","TIPI_5","TIPI_7","TIPI_9"))
+
+tipi_long_recode_all = bind_rows(tipi_long_nonrecoded,
+                                 tipi_long_recode2,
+                                 tipi_long_recode4,
+                                 tipi_long_recode6,
+                                 tipi_long_recode8,
+                                 tipi_long_recode10)
+```
+
+### Finally transform to wide format
+
+```{r}
+tipi_wide_recoded = tipi_long_recode_all %>%
+  select(-response) %>%
+  pivot_wider(names_from="tipi_question", values_from="response_n") %>%
+  rowwise() %>%
+  mutate(tipi_extraversion = mean(c(TIPI_1, TIPI_6), na.rm=T)) %>%
+  mutate(tipi_agreeableness = mean(c(TIPI_2, TIPI_7), na.rm=T),
+         tipi_conscientiousness = mean(c(TIPI_3, TIPI_8), na.rm=T),
+         tipi_emostability = mean(c(TIPI_4, TIPI_9), na.rm=T),
+         tipi_openexperience = mean(c(TIPI_5, TIPI_10), na.rm=T))
+
+knitr::kable(tipi_wide_recoded %>% select(contains("TIPI_", ignore.case = F)))# %>% kableExtra::kable_paper(.)
+
+knitr::kable(tipi_wide_recoded %>% select(contains("tipi_", ignore.case = F)))# %>% kableExtra::kable_paper(.)
+```

@@ -1,0 +1,43 @@
+# Anatomy of an R Project
+
+## Overview of Approach
+R Projects (opened with .RProj files), are a helpful organizing structure for data science projects. By opening the .RProj file, all paths become relative, making it easier to reference files in your code (`data/file.csv`, vs, `C:/Users/nelson/Documents/NestedFolder/Project/data/file.csv`).
+
+## Creating an R Project
+
+In RStudio, navigate to: `File > New Project`. Next create a project from a `New Directory` if you do not have a preexisting folder of code, and `Existing Directory` if you do.
+
+## Project Organization
+
+Within the R Project folder, I typically organize the folders and code as follows:
+
+  - `data`: folder containing all project data that is processed locally.
+  - `scripts`: folder containing all scripts to run against your data.
+  - `output`: folder to store any deliverables created in your `scripts`.
+  - `reference`: any materials (PDFs, Documents, Presentations) to support your work.
+  
+For example, in a research project your folder may look something like this:
+
+```
+project_name
+  project.RProj
+  data
+    demographics.csv
+    rt.csv
+  scripts
+    load_install_libs.R
+    load_data.R
+    preprocess_data.R
+    visualize_data.R
+    model_data.R
+    pipeline.R
+  output
+    data
+      tidy_final_dataset.csv
+    plots
+      figure1.png
+      figure1.pdf
+      figure1.eps
+```
+
+[Click here to download a sample pipeline](https://github.com/nelsonroque/contextlab_reproduciblescience_workshops)

@@ -1,3 +1,0 @@
-# Data Wrangling: Special considerations with survey data
-
-Coming soon!

@@ -1,0 +1,158 @@
+# Regression, and Multilevel Modeling
+
+## Overview
+This example uses data from a reaction time experiment where observers searched for a green circle amongst rectangles, and were asked to report if a line inside the green circle was vertical or horizontal. On some trials, a red rectangle was present, i.e, a distractor. The experiment was conducted in two ways: (1) a random ordering of distractor present and absent trials, and (2) a blocked ordering of distractor present and absent trials. With blocked administration, presumably participants had time to habituate to the distractor and would have a smaller response time decrement as compared with the random presentation condition. 
+
+In this example analysis, we will first take a simple approach, and conduct a linear regression, on participant block-level means of response time. Thereafter we will apply multilevel modeling to better capture the nesting and variability inherent in the trial-level data.
+
+## Load libs
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+library(tidyverse)
+library(lme4)
+```
+
+## Load data
+```{r}
+exp_df <- read_csv("data/exp1.csv")
+```
+
+```{r}
+# show data structure
+head(exp_df)
+```
+---
+
+## Pre-process data
+```{r}
+# filter
+exp_pp <- exp_df %>%
+  filter(!is.na(PARTICIPANT))
+```
+
+### Create additional columns, remove columns
+```{r}
+
+exp_pp_ = exp_pp %>%
+  mutate(is_practice = ifelse(practice == "yes", 1, 0)) %>%
+  mutate(TRIAL = count_trial_sequence) %>%
+  select(-count_trial_sequence, -response_time, -practice) %>%
+  select(datetime, PARTICIPANT, BLOCK, TRIAL, is_practice, correct, RT, everything()) %>%
+  mutate(EXP_BLOCK_RANDOM = ifelse(isRandom == "blocked", 0, 1))
+```
+
+---
+
+### Get unique metadata
+```{r}
+metadata = exp_pp_  %>%
+  select(datetime, contains("DT_"), PARTICIPANT, contains("EXP_")) %>%
+  distinct()
+```
+
+---
+
+## Produce simple aggregates
+
+```{r}
+# overall means and record count by participant
+part_means = exp_pp_ %>%
+  group_by(PARTICIPANT, datetime) %>%
+  summarise(mean_rt = mean(RT, na.rm=T),
+            sd_rt = sd(RT, na.rm=T),
+            q10_rt = quantile(RT, probs=0.1, na.rm=T),
+            q90_rt = quantile(RT, probs=0.9, na.rm=T),
+            n_correct = sum(correct),
+            n = n()) %>%
+  inner_join(metadata)
+
+# overall means by block
+part_means_byblock = exp_pp_ %>%
+  group_by(PARTICIPANT, datetime, BLOCK, is_practice, distractor) %>%
+  summarise(mean_rt = mean(RT, na.rm=T),
+            sd_rt = sd(RT, na.rm=T),
+            q10_rt = quantile(RT, probs=0.1, na.rm=T),
+            q90_rt = quantile(RT, probs=0.9, na.rm=T),
+            n_correct = sum(correct),
+            n = n()) %>%
+  inner_join(metadata)
+```
+### Mean center the reaction times
+```{r}
+exp_m = exp_pp_ %>%
+  inner_join(part_means) %>%
+  mutate(imean_c_RT = RT - mean_rt)
+```
+---
+
+## Data visualization
+
+```{r}
+ggplot(part_means_byblock %>% filter(!is_practice), aes(BLOCK, mean_rt, group=BLOCK, color=as.factor(EXP_BLOCK_RANDOM))) + 
+  geom_boxplot() +
+  facet_grid(. ~ EXP_BLOCK_RANDOM) +
+  theme_bw() +
+  labs(x= "Experiment Block", y = "Mean Response Time (ms)")
+```
+
+---
+
+## Predictive Modeling
+
+## Run simple regression on block means
+```{r}
+fit = lm(mean_rt ~ n_correct + distractor, data=part_means_byblock)
+summary(fit)
+```
+
+### Show resulting model equation
+```{r}
+# show model equation
+library(equatiomatic)
+extract_eq(fit, use_coefs=TRUE, wrap=TRUE)
+```
+
+## Run as series of incremental multilevel model
+```{r}
+# run models, starting with unconditional means model
+fitm_0  = lme4::lmer(RT ~ 1 + (1|PARTICIPANT),
+                      data=exp_pp_)
+fitm_1  = lme4::lmer(RT ~ TRIAL + (1|PARTICIPANT),
+                      data=exp_pp_)
+fitm_2  = lme4::lmer(RT ~ TRIAL + is_practice + (1|PARTICIPANT),
+                      data=exp_pp_)
+fitm_3  = lme4::lmer(RT ~ TRIAL + is_practice + correct + (1|PARTICIPANT),
+                      data=exp_pp_)
+fitm_4  = lme4::lmer(RT ~ TRIAL + is_practice + correct +
+                       distractor + 
+                       (1|PARTICIPANT),
+                      data=exp_pp_)
+fitm_5  = lme4::lmer(RT ~ TRIAL + is_practice + correct +
+                       distractor + 
+                       display_size + 
+                       EXP_BLOCK_RANDOM +
+                       (1|PARTICIPANT),
+                      data=exp_pp_)
+```
+
+```{r}
+extract_eq(fitm_5, use_coefs=TRUE, wrap=TRUE)
+```
+
+### Compare models
+```{r}
+# compare models
+anova(fitm_0, fitm_1, fitm_2, fitm_3, fitm_4, fitm_5)
+```
+
+## Create publication-ready table of results
+```{r}
+sjPlot::tab_model(fitm_0, fitm_5)
+```
+
+## Create publication-ready figure of results
+```{r}
+sjPlot::plot_model(fitm_5, type="pred")
+```
+

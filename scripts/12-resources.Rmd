@@ -1,0 +1,61 @@
+# Resources
+
+## Recommended R packages
+
+  ```
+  install.packages(c('tidyverse', 'devtools', 'readr', 'tidytext', 'textdata',
+  'topicmodels', 'wordcloud', 'ggwordcloud'))
+  ```
+
+## Books
+
+  - [R for Data Science](https://r4ds.had.co.nz/)
+  - [Advanced R](https://adv-r.hadley.nz/index.html)
+  - [R Graphics Cookbook](http://www.cookbook-r.com/)
+  - [Text Mining with R](https://www.tidytextmining.com/)
+  - [Reproducible Analyses with R](https://nceas.github.io/sasap-training/materials/reproducible_research_in_r_fairbanks/)
+
+## Cheatsheets
+
+  - [List of Cheatsheets](https://www.rstudio.com/resources/cheatsheets/)
+  - [ggplot2](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-visualization.pdf)
+  - [dplyr](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf)
+  - [tidyr](https://raw.githubusercontent.com/rstudio/cheatsheets/main/tidyr.pdf)
+  - [Data import with readr, readxl, and googlesheets4 cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-import.pdf)
+  - [Apply functions with purrr](https://raw.githubusercontent.com/rstudio/cheatsheets/main/purrr.pdf)
+  - [String manipulation](https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf)
+  - [Working with dates and times](https://raw.githubusercontent.com/rstudio/cheatsheets/main/lubridate.pdf)
+  - [RMarkdown](https://raw.githubusercontent.com/rstudio/cheatsheets/main/rmarkdown.pdf)
+
+## Visualization
+
+  - [R-Charts](https://r-charts.com/)
+  - [Design your own Grid Plot](https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html)
+  
+## Datasets
+
+ - [Dr. Roque's list of Datasets](https://github.com/nelsonroque/datasets)
+ - [fivethirtyeight](https://fivethirtyeight-r.netlify.com/)
+ - [UK Baby Names](https://github.com/mine-cetinkaya-rundel/ukbabynames)
+ - [More baby names](https://docs.ropensci.org/ozbabynames/)
+ - [TidyTuesday](https://github.com/rfordatascience/tidytuesday)
+ - [LOTR](https://github.com/jennybc/lotr)
+ - [Most raw data from gapminder](https://www.gapminder.org/data/)
+ - [Untidy data](https://www.jvcasillas.com/untidydata/)
+ - [Data Science in a Box](https://github.com/rstudio-education/dsbox)
+ - [Data visualization](https://kieranhealy.org/blog/archives/2018/12/12/teaching-and-learning-materials-for-data-visualization/)
+  
+## Stats
+  - [Intro to R Stats](https://www.cyclismo.org/tutorial/R/)
+  - [Multilevel Modeling Primer 1](https://quantdev.ssri.psu.edu/tutorials/r-bootcamp-introduction-multilevel-model-and-interactions)
+  - [Multilevel modeling Primer 2](https://rpubs.com/rslbliss/r_mlm_ws)
+
+## Blogs
+
+  - [Revolution Analytics](https://blog.revolutionanalytics.com/)
+  - [RBloggers](https://www.r-bloggers.com/)
+
+## Interactive Learning Tools
+  - [Swirl - Interactive R](https://swirlstats.com/)
+  - [DataCamp](https://www.datacamp.com/courses/free-introduction-to-r)
+  - [CodeAcademy](https://www.codecademy.com/catalog/language/r)

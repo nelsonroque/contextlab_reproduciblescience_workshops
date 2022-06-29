@@ -1,0 +1,106 @@
+# Reproducible Science Tools & Platforms
+
+## Overview
+
+Reproducible Science is supported by a large toolkit of software. Below is a highlight of a few important tools that meet most data needs.
+
+## Reproducible Science Tools & Platforms
+
+- [R](https://cran.r-project.org/)
+- [LaTeX](https://www.latex-project.org/)
+- [Markdown](https://www.markdownguide.org/)
+- [Python](https://www.python.org/), [Anaconda](https://www.anaconda.com/)
+- [Github](https://github.com), [Github Pages](https://pages.github.com)
+- [Docker](https://www.docker.com/)
+- VMs (e.g., [VirtualBox](https://www.virtualbox.org))
+- Infrastructure as Code (IaC; e.g., [AWS CDK](https://aws.amazon.com/cdk/))
+- IDEs (e.g., [Visual Studio Code](https://code.visualstudio.com/))
+- Pre-Registration (e.g., [Open Science Framework](https://osf.io/))
+- Documentation (e.g., [Docusaurus](https://docusaurus.io))
+
+---
+
+## What is Github?
+
+A platform to store and collaborate on code.
+
+[Get Github Desktop](https://desktop.github.com/)
+
+[Get Github Cheatsheets](https://training.github.com/downloads/github-git-cheat-sheet/)
+
+### Github Concepts
+
+- `Repository`: a logical unit of storage for maintaining code/other assets. Can contain many folders, files.
+- `.gitignore`: a file (with dot prefix) to specify what files should NOT be pushed to Github
+- `.gitkeep`: a file (with dot prefix) to specify that a folder should be kept if blank as part of the project structure. This is helpful when creating templates.
+- `commit`: create a record/snapshot of all files (or specific files) at a moment in time. You may tag collaborators, add a title and notes.
+- `push`: 'storing' the result of prior commits
+- `pull`: 'extracting' the result of prior commits
+- `diff`: difference (line-specific) between two commits. Helpful when trying to remember when and where code edits where made.
+
+---
+
+## What is Markdown?
+
+Lightweight markup used to add formatting elements to plaintext documents.
+
+Created by John Gruber in 2004, Markdown is now one of the world’s most popular markup languages.
+
+- Using Markdown is different than using a WYSIWYG editor.
+- In Word, you click buttons in GUI to apply formatting
+- In Markdown, you add syntax to text to apply formatting
+
+For more information, visit: [https://www.markdownguide.org/getting-started/ 
+](https://www.markdownguide.org/getting-started/ 
+)
+
+---
+
+## What is R?
+
+Statistical programming language (released ~1993). Similar to `S` (released ~1976).
+
+Download [R](https://cran.r-project.org/)
+
+### What is RStudio?
+
+Integrated development environment (IDE) for R.
+
+Download [RStudio](https://www.rstudio.com/products/rstudio/download/)
+
+### What is RMarkdown?
+
+Reproducible notebook (akin to Jupyter Notebooks in Python) where you can write a narrative using Markdown syntax and embed code/plots throughout.
+
+Markdown is a simple formatting syntax for authoring HTML, PDF, MS Word and Powerpoint documents, websites and more. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+This is an R Markdown-based book, using the `bookdown` package. 
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+### What are R packages?
+
+Think of CRAN as an equivalent to iOS App Store, or Google Play Store; CRAN is where you download published R packages (directly from R, RStudio).
+
+A developer can also make packages available directly in source code, or via tools like Github, for example:
+
+```
+install.packages("devtools")
+devtools::install_github("nelsonroque/ruf")
+```
+---
+
+## What is Endnote
+
+A citation manager. Especially useful for research projects with large amounts of citations.
+
+Here is a [guide from the UCF library with installation links](https://guides.ucf.edu/citations-endnote).
+
+### Why Endnote?
+- no need for manual tracking (deleting, updating) of references
+- change citation format at click of a button
+- capture PDFs for any citations at click of a button
+
+### Endnote Downloads:
+- [Mac](http://ezproxy.library.ucf.edu/loggedin/EndNote20SiteInstaller.zip)
+- [Windows](http://ezproxy.library.ucf.edu/loggedin/EndNote20.zip)

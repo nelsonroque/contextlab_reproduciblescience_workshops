@@ -7,7 +7,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Overview of Approach
 This tutorial is written as a guide for the question,"how do I do X in R?"
 
-
 ## Installing packages
 ```
 # install packages from CRAN ----
@@ -16,8 +15,6 @@ install.packages(c("xlsx", "tidyverse", "devtools"))
 
 ### Aside: Some of my favorite packages
 
-  - `ggplot2`
-  
   - Install them all in one go with the code below:
   ```
   install.packages(c("tidyverse", "devtools", "qualtRics",
@@ -30,6 +27,7 @@ install.packages(c("xlsx", "tidyverse", "devtools"))
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 # load libraries ----
 library(tidyverse)
+set.seed(1013) # for reproducibility
 ```
 
 ## Assign values into variables
@@ -43,8 +41,11 @@ this_is_list <- list(x = rnorm(100), y = rnorm(10))
 this_is_dataframe <- data.frame(x = rnorm(100), y = rnorm(100))
 this_is_tibble <- tibble::tibble(x = rnorm(100), y = rnorm(100))
 this_is_vector <- c(1,2,3)
+```
 
-# check underlying types ----
+
+## Check underlying types
+```{r}
 class(this_is_double)
 class(this_is_double2)
 class(this_is_logical)
@@ -59,7 +60,6 @@ class(this_is_vector)
 # generate a sequence ----
 seq_1_100 <- seq(1, 100, by=1)
 seq_0_1 <- seq(0, 1, by=0.1)
-
 seq_0_1
 
 # sample from vector of values -----
@@ -173,8 +173,8 @@ data_binned_label = data_to_bin %>% mutate(x_bin = cut(x, breaks=c(0,300,400,500
 data_binned_num = data_to_bin %>% mutate(x_bin = cut(x, breaks=c(0,300,600,800), labels=FALSE))
 data_binned_ord = data_to_bin %>% mutate(x_bin = cut(x, ordered_result=T, breaks=c(0,300,400,500,600,Inf)))
 
-data_binned_label
-data_binned_num
+knitr::kable(head(data_binned_label))
+knitr::kable(head(data_binned_num))
 
 ```
 
@@ -194,8 +194,6 @@ gsub("ERR","ERROR",c("ERR", "ERRROR"))
 ```{r}
 # stringi stuff
 library(stringi)
-stri_extract_all(regex="\\p{Emoji}", c("! Bienvenidos! 😃🌍", "spam, spam, 🥓, 🍳"))
-
 
 stri_count_fixed("ACATGAACGGGTACACACTG", "ACA", overlap=TRUE)
 
@@ -208,10 +206,15 @@ words <- list(c("spam", "bacon", "sausage", "spam"), c("eggs", "spam"))
 stri_join_list(words, sep=", ")
 ```
 
+## Generate Random data
+
+```{r}
+x = rnorm(n=500,mean=300,sd=3)
+```
+
 ## Simple stats
 
 ```{r}
-x = rnorm(500)
 mean(x)
 sd(x)
 min(x)
@@ -225,9 +228,10 @@ quantile(x,c(0.99))
 
 ```{r}
 ## Data quality inspection
-skimr::skim(x) # one variable 
-skimr::skim(dataset_csv) # or a whole dataset!
+knitr::kable(skimr::skim(x)) # one variable 
+knitr::kable(skimr::skim(dataset_csv)) # or a whole dataset!
 dqr = skimr::skim(dataset_csv) # save to a variable to later export as csv
+knitr::kable(dqr)
 ```
 
 ## Data integrity

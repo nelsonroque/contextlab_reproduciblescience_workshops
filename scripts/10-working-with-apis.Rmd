@@ -1,0 +1,48 @@
+# Working with APIs
+
+## Overview
+
+APIs make the world go round. From airlines, to your groceries, APIs are charged with securely and efficiently shipping data back and forth between businesses and their consumers.
+
+This example will demonstrate how to interact with a set of APIs that cover a range of possible use cases (e.g., paginated and non-paginated returns, authentication).
+
+:::attention
+## Be Mindful of Limits
+When connecting to APIs for data, be mindful of the frequency of requests you make. With overuse, depending on the API, you may be throttled, blocked, or limited for a period of time. Check API documentation for posted limits (e.g., 1000 requests per month).
+:::
+
+## Public APIs as a Learning Tool
+Below is a list of public APIs you may consider for your learning:
+
+  - [https://github.com/public-apis/public-apis](https://github.com/public-apis/public-apis)
+  - [Randomly Generated Data](https://random-data-api.com/documentation)
+
+## The Data
+
+For this learning exercise, we will work with an API that generates random data. We will get 10 records of faux user records.
+
+https://random-data-api.com/api/internet_stuff/random_internet_stuff
+
+### Custom function to call API and return data frame
+```{r}
+call_api <- function(api) {
+return(as.data.frame(jsonlite::read_json(api)))
+}
+```
+
+```{r}
+library(tidyverse)
+
+n_records = 10
+results = list()
+for(i in 1:n_records) {
+  results[[i]] = call_api("https://random-data-api.com/api/internet_stuff/random_internet_stuff")
+}
+results_df = bind_rows(results)
+```
+
+```{r}
+library(knitr)
+library(kableExtra)
+knitr::kable(results_df)# %>% kableExtra::kable_minimal(.)
+```

@@ -1,4 +1,19 @@
-# Text Mining
+# Working with Text Data
+
+## Background
+
+Text Mining is the process of analyzing text data for key topics, trends, and hidden relationships. Methods include:
+  - Word frequency analysis
+  - Wordclouds
+  - Topic modeling
+
+This collection of methods is especially important since, 80% of the world’s data is in an unstructured format.
+
+:::attention
+## The Secret is Pre-processing
+
+Always consider the data processing implications of your data source. Depending on if you are working with transcriptions form audio or video, or digitized free-entry text, you will want to pre-process your data for misspellings and incorrect transcriptions before proceeding with any text mining.
+:::
 
 ## Overview
 For this example, we will work with product review data from the following open science resource: [https://osf.io/tyue9](https://osf.io/tyue9)
@@ -22,22 +37,45 @@ library(ggwordcloud)
 
 df <- readr::read_csv("data/fake reviews dataset.csv") %>%
   mutate(id = row_number()) %>% # add row id
-  select(id, category, everything())
+  select(id, category, everything()) %>%
+  mutate(text_clean = stringr::str_replace_all(text_, "[^[:alnum:]]", " "))
+  # clean up text a bit
 
+
+unique(df$category)
+unique(df$label)
 ```
 
 ## Produce a data quality report
 ```{r}
 df_dq <- skimr::skim(df)
 
-# get proportion of stop_words by lexicon ----
+knitr::kable(df_dq)# %>% kableExtra::kable_minimal(.)
+
+```
+
+
+## Not all lexicons are equal
+
+Get proportion of stop_words by lexicon (onix, SMART, snowball). Full listing of words [available here](https://www.kaggle.com/code/therohk/stopwords-compared-snowball-smart-onix/report).
+
+  - [Learn more about `onix`](http://www.lextek.com/manuals/onix/stopwords1.html)
+  - [Learn more about `SMART`](https://www.jmlr.org/papers/volume5/lewis04a/lewis04a.pdf)
+  - [Learn more about `snowball`](http://snowball.tartarus.org/algorithms/english/stop.txt)
+
+```{r}
+
 prop.table(table(stop_words$lexicon))
+```
 
-# if a word you cared about is in the stop word dictionary you will lose it
-# in your analysis. Use the code below if you need to exclude words from the stopword dictionary.
-# stop_words_filt = stop_words %>%
-#   filter(word != "better")
+If a word you cared about is in the stop word dictionary you will lose it in your analysis. Use the code below if you need to exclude words from the stopword dictionary.
 
+```
+stop_words_filt = stop_words %>%
+   filter(word != "better")
+```
+
+```{r}
 # Otherwise continue
 stop_words_filt = stop_words
 
@@ -49,7 +87,7 @@ stop_words_filt = stop_words
 # text mining analyses ----
 section_freeresponse_tokens = df %>%
   unnest_tokens(bigram,
-                "text_",
+                "text_clean",
                 token = "ngrams",
                 n = 2,
                 drop = F) %>%
@@ -73,16 +111,38 @@ section_fr_1_tf_idf = section_freeresponse_tokens %>%
   bind_tf_idf(word1, category, n) %>%
   arrange(desc(tf_idf))
 
-unique(df$category)
+knitr::kable(head(section_fr_1_tf_idf))# %>% kableExtra::kable_paper(.)
+
+```
+
+```{r}
+section_fr_2_tf_idf = section_freeresponse_tokens %>%
+  count(label, word1) %>%
+  bind_tf_idf(word1, label, n) %>%
+  arrange(desc(tf_idf))
+
+knitr::kable(head(section_fr_2_tf_idf))# %>% kableExtra::kable_paper(.)
+```
+
+```{r}
 
 # vis tf_idf ----
 section_fr_1_tf_idf %>%
   group_by(category) %>%
-  slice_max(tf_idf, n = 2) %>%
+  slice_max(tf_idf, n = 3) %>%
   ungroup() %>%
   ggplot(aes(tf_idf, fct_reorder(word1, tf_idf), fill = category)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~category, ncol = 2, scales = "free") +
+  labs(x = "tf-idf", y = NULL)
+
+section_fr_2_tf_idf %>%
+  group_by(label) %>%
+  slice_max(tf_idf, n = 3) %>%
+  ungroup() %>%
+  ggplot(aes(tf_idf, fct_reorder(word1, tf_idf), fill = label)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~label, ncol = 2, scales = "free") +
   labs(x = "tf-idf", y = NULL)
 
 ```
@@ -100,6 +160,42 @@ wordcloud::wordcloud(words = section_fr_1_tf_idf %>% pull(word1),
 ```
 
 ## Conduct simple sentiment analysis
+
+  - nrc. binary “yes”/“no” for categories positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust.
+  - bing. “positive”/“negative” classification.
+  - AFINN. score between -5 (most negative) and 5 (most positive). 
+  - loughran. “positive”/“negative”/“litigious”/“uncertainty”/“constraining”/“superflous” classification.
+  
+### Visualize sentiment distribution in each lexicon
+
+[Source code](https://bookdown.org/mpfoley1973/data-sci/sentiment-analysis.html)
+  
+```
+
+x1 <- get_sentiments(lexicon = "nrc") %>%
+  count(sentiment) %>%
+  mutate(lexicon = "nrc")
+x2 <- get_sentiments(lexicon = "bing") %>%
+  count(sentiment) %>%
+  mutate(lexicon = "bing")
+x3 <- get_sentiments(lexicon = "afinn") %>%
+  count(value) %>%
+  mutate(lexicon = "afinn") %>%
+  mutate(sentiment = as.character(value)) %>%
+  select(-value)
+# x4 <- get_sentiments(lexicon = "loughran") %>%
+#   count(sentiment) %>%
+#   mutate(lexicon = "loughran")
+x <- bind_rows(x1, x2, x3)
+
+ggplot(x, aes(x = fct_reorder(sentiment, n), y = n, fill = lexicon)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(title = "Sentiment Counts", x = "", y = "") +
+  facet_wrap(~ lexicon, scales = "free")
+
+```
+
 ```
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -158,34 +254,50 @@ Resource: https://www.tidytextmining.com/topicmodeling.html
 
 ```{r}
 
-# ap_data = section_freeresponse_tokens %>%
-#   cast_dtm(text_, word1, n)
-# 
-# ap_lda <- LDA(ap_data, k = 2, control = list(seed = 1234))
-# ap_topics <- tidy(ap_lda, matrix = "beta")
-# ap_documents <- tidy(ap_lda, matrix = "gamma")
-# 
-# ap_top_terms <- ap_topics %>%
-#   filter(!is.na(term)) %>%
-#   group_by(topic) %>%
-#   slice_max(beta, n = 20) %>%
-#   ungroup() %>%
-#   arrange(topic, -beta)
-# 
-# ap_top_terms %>%
-#   mutate(term = reorder_within(term, beta, topic)) %>%
-#   ggplot(aes(beta, term, fill = factor(topic))) +
-#   geom_col(show.legend = FALSE) +
-#   facet_wrap(~ topic, scales = "free") +
-#   scale_y_reordered()
-# 
-# beta_wide <- ap_topics %>%
-#   mutate(topic = paste0("topic", topic)) %>%
-#   pivot_wider(names_from = topic, values_from = beta) %>%
-#   filter(topic1 > .001 | topic2 > .001) %>%
-#   mutate(log_ratio_t2_t1 = log2(topic2 / topic1),
-#          log_ratio_t3_t1 = log2(topic3 / topic1))
-# 
-# ggplot(beta_wide, aes(log_ratio_t2_t1, term)) +
-#   geom_bar(stat="identity")
+ap_data = section_fr_1_tf_idf %>%
+  mutate(word1_ = as.character(word1)) %>%
+  cast_dtm(category, word1_, n)
+
+```
+
+Topic models in practice use larger `k` values - `k=2` works for this example.
+
+```{r}
+
+ap_lda <- LDA(ap_data, k = 2, control = list(seed = 1234))
+ap_topics <- tidy(ap_lda, matrix = "beta")
+ap_documents <- tidy(ap_lda, matrix = "gamma")
+```
+
+
+## Visualize topic modeling results
+```{r}
+ap_top_terms <- ap_topics %>%
+  filter(!is.na(term)) %>%
+  group_by(topic) %>%
+  slice_max(beta, n = 20) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+ap_top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(beta, term, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  scale_y_reordered()
+
+```
+
+Visualize the terms that had the greatest difference in β between topic 1 and topic 2
+
+```{r}
+threshold = .006 # low values return more words
+beta_wide <- ap_topics %>%
+  mutate(topic = paste0("topic", topic)) %>%
+  pivot_wider(names_from = topic, values_from = beta) %>%
+  filter(topic1 > threshold | topic2 > threshold) %>%
+  mutate(log_ratio_t2_t1 = log2(topic2 / topic1))
+
+ggplot(beta_wide, aes(log_ratio_t2_t1, term)) +
+  geom_bar(stat="identity")
 ```
