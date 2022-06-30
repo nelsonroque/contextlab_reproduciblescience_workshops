@@ -1,0 +1,8 @@
+{
+  "study_id": "[INSERT STUDY NAME]",
+  "study_groupcode": "[INSERT 4 DIGIT STUDY ID]",
+  "cogtasks": ["dotmemory", "symbolsearch"],
+  "surveys": [["Notified_Survey_1", "Notified_Survey_2", "Notified_Survey_3"],
+              "Morning_Survey", 
+              "Evening_Survey"]
+}
