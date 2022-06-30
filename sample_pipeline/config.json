@@ -1,0 +1,5 @@
+{
+  "filename_prefix": "[INSERT EXPORTED FILENAME PREFIX]",
+  "packages": ["tidyverse", "devtools", "rio"],
+  "first_run": false
+}
