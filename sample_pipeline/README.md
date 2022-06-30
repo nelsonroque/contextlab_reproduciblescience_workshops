@@ -4,6 +4,8 @@ Generic template for study data pipeline.
 
 ```
 pipeline
-    data
-    output
+    data/*
+    output/*
+    scripts/*
+    pipeline.R
 ```
