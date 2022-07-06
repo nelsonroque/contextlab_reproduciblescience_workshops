@@ -1,8 +1,4 @@
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-# R Syntax Primer
+# R Primer (Syntax and Basic Functions)
 
 ## Overview of Approach
 This tutorial is written as a guide for the question,"how do I do X in R?"
@@ -10,19 +6,20 @@ This tutorial is written as a guide for the question,"how do I do X in R?"
 ## Installing packages
 ```
 # install packages from CRAN ----
-install.packages(c("xlsx", "tidyverse", "devtools"))
+install.packages(c("tidyverse", "devtools"))
 ```
 
 ### Aside: Some of my favorite packages
 
-  - Install them all in one go with the code below:
-  ```
-  install.packages(c("tidyverse", "devtools", "qualtRics",
-                     "tidytext", "textdata", "topicmodels",
-                     "wordcloud", "ggwordcloud", "lme4", "sjPlot",
-                     "cowplot", "stringi", "digest"))
-  
-  ```
+Install them all in one go with the code below:
+```
+install.packages(c("tidyverse", "devtools", "qualtRics",
+                   "tidytext", "textdata", "topicmodels",
+                   "wordcloud", "ggwordcloud", "lme4", "sjPlot",
+                   "janitor", "esquisse", "rio",
+                   "cowplot", "stringi", "digest"))
+
+```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 # load libraries ----
@@ -115,13 +112,42 @@ library(haven)
 
 # write files of
 df_for_examples = tibble(x = rnorm(100), y = rnorm(100), study="demo_rnorm_in_r")
-
-write_csv(df_for_examples, "data/demo_fileread.csv")
-write_delim(df_for_examples,"data/demo_fileread.txt",delim="\t")
-write_sav(df_for_examples, "data/demo_fileread.sav")
-write_sas(df_for_examples, "data/demo_fileread.sas")
 ```
 
+```{r}
+library(readr)
+write_csv(df_for_examples, "../data/demo_fileread.csv")
+write_delim(df_for_examples,"../data/demo_fileread.txt",delim="\t")
+write_sav(df_for_examples, "../data/demo_fileread.sav")
+write_sas(df_for_examples, "../data/demo_fileread.sas")
+```
+
+## Export multiple dataframes into a single Excel workbook
+```{r}
+library(rio)
+df_1 = data.frame(x= rnorm(10), dataset=1)
+df_2 = data.frame(x= rnorm(10), dataset=2)
+df_3 = data.frame(x= rnorm(10), dataset=3)
+
+export(format="xlsx", file="../output/OneExcelWorkbookWith3Sheet.xlsx", x=list(df1=df_1, df2=df_2, df3=df_3))
+```
+
+## Sanitize column names
+
+```{r}
+library(janitor)
+
+# create demo data
+df_janitor_before = tibble::tibble(`A long column Name with Mixed case`=rnorm(20),
+                    `COLUMN_NAME`=rnorm(20),
+                    `GROUP_$$`=rnorm(20))
+knitr::kable(df_janitor_before)
+
+df_janitor_after = df_janitor_before %>%
+  janitor::clean_names()
+knitr::kable(df_janitor_after)
+
+```
 
 ```{r}
 # load data ----
@@ -130,20 +156,20 @@ write_sas(df_for_examples, "data/demo_fileread.sas")
 library(readr)
 
 # csv
-dataset_csv <- read_csv("data/demo_fileread.csv", na = "empty")
+dataset_csv <- read_csv("../data/demo_fileread.csv", na = "empty")
 
 # tab-delimited file
-dataset_tab <- read_delim("data/demo_fileread.txt", delim = "\t", 
+dataset_tab <- read_delim("../data/demo_fileread.txt", delim = "\t", 
                       escape_double = FALSE, 
                       trim_ws = TRUE)
 
 # Excel file
 library(readxl)
-dataset_excel <- read_excel("data/demo_fileread.xlsx", sheet = "Sheet1")
+dataset_excel <- read_excel("../data/demo_fileread.xlsx", sheet = "Sheet1")
 
 # read SPSS and SAS data file
 library(haven)
-dataset_sav <- read_sav("data/demo_fileread.sav")
+dataset_sav <- read_sav("../data/demo_fileread.sav")
 #dataset_sas <- read_sav("data/demo_fileread.sas")
 ```
 
@@ -163,6 +189,7 @@ df_all_link_innerjoin <- df_all %>% inner_join(df_link)
 df_all_link_fulljoin <- df_all %>% full_join(df_link) # end up with 1 extra due to entry for dataset 4
 
 ```
+
 ## Binning data
 
 ```{r}
