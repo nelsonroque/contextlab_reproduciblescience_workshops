@@ -27,6 +27,40 @@ library(tidyverse)
 set.seed(1013) # for reproducibility
 ```
 
+## Getting help in R
+```{r}
+help("digest")
+help("state")
+??dplyr::mutate
+```
+
+# Quick note on case-sensitivity
+
+```{r}
+a = "apples"
+A = "bananas"
+print(a)
+print(A)
+```
+
+## Variable Assignment
+
+Helpful article, [RE: <- and = for assignment](https://www.roelpeters.be/the-difference-between-arrow-and-equals-assignment-in-r/)
+
+tldr, to equate R with variable assignment in other programming languages, the = symbol was implemented.
+```{r}
+b = "bot"
+c <- "bot"
+b
+c
+
+`<-`(x, 3) # Prefix/Polish notation of arrow shortcut
+x <- 3 # Leftwards assignment
+3 -> x # Rightwards assignment
+x = 3
+x <<- 3 #  it will store the variable in the global environment (.GlobalEnv). 
+```
+
 ## Assign values into variables
 
 ```{r, message=FALSE, warning=FALSE}
