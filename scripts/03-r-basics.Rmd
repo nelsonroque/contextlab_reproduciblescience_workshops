@@ -4,6 +4,11 @@
 This tutorial is written as a guide for the question,"how do I do X in R?"
 
 ## Installing packages
+```{r}
+a = c(1,2,3)
+
+```
+
 ```
 # install packages from CRAN ----
 install.packages(c("tidyverse", "devtools"))
@@ -32,6 +37,7 @@ set.seed(1013) # for reproducibility
 help("digest")
 help("state")
 ??dplyr::mutate
+??dplyr
 ```
 
 # Quick note on case-sensitivity
@@ -41,6 +47,7 @@ a = "apples"
 A = "bananas"
 print(a)
 print(A)
+a == A
 ```
 
 ## Variable Assignment
@@ -105,19 +112,20 @@ sampled_values_replace
 
 ```{r, message=FALSE, warning=FALSE}
 # list files
-all_csv_files = list.files("data", 
+all_csv_files = list.files("../data", 
                        pattern="*.csv", 
                        recursive = T, 
                        full.names = T)
 all_csv_files
 
-all_files = list.files("data", 
+all_files = list.files("../data", 
                        pattern="*", 
                        recursive = T, 
                        full.names = T)
 all_files
 
 # check if directory exists
+dir.exists("../data")
 dir.exists("data")
 
 # create directory
@@ -247,30 +255,35 @@ knitr::kable(head(data_binned_num))
 grep("APP", c("APPLES", "APP", "APPLICATION"))
 grep("APP", c("APPLES", "APP", "APPLICATION"), value=T)
 
+c("APPLES", "APP", "APPLICATION")[grepl("APP", c("APPLES", "APP", "APPLICATION"))]
+
 ## Replace data in data
 gsub("APPLES","BANANAS",c("APPLES", "BANANAS"))
 gsub("ERR","ERROR",c("ERR", "ERRROR"))
+
+gsub("stimuli:","",c("stimuli:word", "stimuli:word2"))
 ```
 
 ```{r}
 # stringi stuff
 library(stringi)
 
-stri_count_fixed("ACATGAACGGGTACACACTG", "ACA", overlap=TRUE)
+stri_count_fixed("ACAACATGAACGGGTACACACTG", "ACA", overlap=TRUE)
 
 x <- c("spam", "")
 stri_length(x)
 
-stri_dup(letters[1:5], 1:5)
+stri_dup(letters[1:26], 1:26)
 
 words <- list(c("spam", "bacon", "sausage", "spam"), c("eggs", "spam"))
-stri_join_list(words, sep=", ")
+stri_join_list(words, sep=":")
 ```
 
 ## Generate Random data
 
 ```{r}
-x = rnorm(n=500,mean=300,sd=3)
+x = rnorm(n=500,mean=300,sd=1)
+hist(x)
 ```
 
 ## Simple stats
@@ -283,6 +296,8 @@ max(x)
 quantile(x,c(0.6))
 quantile(x,c(0.95))
 quantile(x,c(0.99))
+
+quantile(x,c(0.01,0.99))
 ```
 
 ## Data quality reports
@@ -291,7 +306,8 @@ quantile(x,c(0.99))
 ## Data quality inspection
 knitr::kable(skimr::skim(x)) # one variable 
 knitr::kable(skimr::skim(dataset_csv)) # or a whole dataset!
-dqr = skimr::skim(dataset_csv) # save to a variable to later export as csv
+dqr = skimr::skim(dataset_csv) %>%
+  mutate(dataset = "fake")# save to a variable to later export as csv
 knitr::kable(dqr)
 ```
 
@@ -301,6 +317,7 @@ MD5 and SHA256 hashes of data are helpful when making snapshots of data for long
 
 ```{r}
 library(digest)
-digest("a", algo="md5")
+digest("a ", algo="md5")
+digest(dqr, algo="md5")
 digest("a", algo="sha256")
 ```
