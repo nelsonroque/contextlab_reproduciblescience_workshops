@@ -40,4 +40,4 @@ project_name
       figure1.eps
 ```
 
-[Click here to download a sample pipeline](https://github.com/nelsonroque/contextlab_reproduciblescience_workshops)
+[Click here to download a sample pipeline](https://github.com/nelsonroque/contextlab_reproduciblescience_workshops/tree/main/sample_pipeline)
