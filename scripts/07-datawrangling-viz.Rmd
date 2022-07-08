@@ -21,7 +21,7 @@ library(tidyverse)
 ```{r}
 # read in the Google Mobility dataset
 google_mobility <- read_csv("https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv")
-
+# ~ 700MB AND 7MIN (LAST UPDATED: 07/07/2022)
 ```
 
 ## Inspect dataset features
@@ -84,8 +84,9 @@ google_mobility_US_w_lu <- google_mobility_US %>%
 
 ```{r}
 
-#skimr::skim(google_mobility_US)
-
+dqr_gm = skimr::skim(google_mobility_US)
+head(dqr_gm)
+knitr::kable(dqr_gm) %>% kableExtra::kable_classic()
 ```
 
 ## Filter data
@@ -381,6 +382,6 @@ bottom10_changes <- largest_changes_parks_wide %>%
 largest_changes_parks_long
 largest_changes_parks_wide
 
-top10_changes
-bottom10_changes
+knitr::kable(top10_changes) %>% kableExtra::kable_paper()
+knitr::kable(bottom10_changes) %>% kableExtra::kable_paper()
 ```
