@@ -23,8 +23,10 @@ df <- expand.grid(month=seq(1,12,1),
          dt_weekday_l = lubridate::wday(mdy, label=T)) %>%
   filter(!is.na(dt_weekday)) # remove feb 29, 30, 31
 
-knitr::kable(head(df))
-
+# export tables
+knitr::kable(head(df)) %>% kableExtra::kable_classic()
+knitr::kable(head(df)) %>% kableExtra::kable_material()
+knitr::kable(head(df)) %>% kableExtra::kable_material_dark()
 ```
 
 ```{r}
@@ -84,8 +86,23 @@ These operations work on types as.Date data types (and related as.POSIXct), not 
 :::
 
 ```{r}
-ref_date = as.Date("2020-10-11")
+ref_date <- as.Date("2020-10-11")
 paste0("Reference date: ", ref_date)
 paste0("Reference date - 90 days: ", ref_date - 90)
 paste0("Reference date + 90 days: ", ref_date + 90)
+```
+
+```{r}
+all_ref_dates <- tibble(
+                       "ref_labels" = c(
+                       "Reference date - 90 days",
+                       "Reference date + 90 days",
+                       "Reference date - 5000 days",
+                       "Reference date + 5000 days"),
+                       "original_date" = c("2020-10-11"),
+                       "ref_values" = c(ref_date - 90,
+                       ref_date + 90,
+                       ref_date - 5000,
+                       ref_date + 5000))
+knitr::kable(all_ref_dates) %>% kableExtra::kable_material()
 ```

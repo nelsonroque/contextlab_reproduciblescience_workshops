@@ -4,6 +4,10 @@
 
 In this example, we will work with the `qualtRics` package to read in Qualtrics exports, and apply minimal pre-processing.
 
+```{r}
+install.packages("kableExtra")
+```
+
 ## Load data
 
 Read in survey and split StartDate into two columns for easy filtering (we don't need pilot data)
@@ -29,7 +33,7 @@ qualtrics_df <- read_survey(fn) %>%
 df_demo = qualtrics_df %>%
 select(ResponseId, contains("demo"))
 
-knitr::kable(df_demo)# %>% kableExtra::kable_paper(.)
+knitr::kable(df_demo) %>% kableExtra::kable_paper(.)
 ```
 
 ## Split out survey metadata
@@ -37,7 +41,7 @@ knitr::kable(df_demo)# %>% kableExtra::kable_paper(.)
 df_metadata = qualtrics_df %>%
 select(ResponseId, contains("Date"), contains("duration"), contains("progress"))
 
-knitr::kable(df_metadata)# %>% kableExtra::kable_paper(.)
+knitr::kable(df_metadata) %>% kableExtra::kable_paper(.)
 ```
 
 ## Split timer data into seperate dataset
@@ -45,7 +49,7 @@ knitr::kable(df_metadata)# %>% kableExtra::kable_paper(.)
 df_timings = qualtrics_df %>%
 select(ResponseId, contains("timer"))
 
-knitr::kable(df_timings)# %>% kableExtra::kable_paper(.)
+knitr::kable(df_timings) %>% kableExtra::kable_paper(.)
 
 ```
 
@@ -134,7 +138,11 @@ tipi_wide_recoded = tipi_long_recode_all %>%
          tipi_emostability = mean(c(TIPI_4, TIPI_9), na.rm=T),
          tipi_openexperience = mean(c(TIPI_5, TIPI_10), na.rm=T))
 
-knitr::kable(tipi_wide_recoded %>% select(contains("TIPI_", ignore.case = F)))# %>% kableExtra::kable_paper(.)
+# notice the parameter `ignore.case` = F, we want this since
+# we have both TIPI_* and tipi_* variables in our dataset.
+knitr::kable(tipi_wide_recoded %>% 
+select(contains("TIPI_", ignore.case = F))) %>% kableExtra::kable_paper(.)
 
-knitr::kable(tipi_wide_recoded %>% select(contains("tipi_", ignore.case = F)))# %>% kableExtra::kable_paper(.)
+knitr::kable(tipi_wide_recoded %>% 
+select(contains("tipi_", ignore.case = F))) %>% kableExtra::kable_paper(.)
 ```
