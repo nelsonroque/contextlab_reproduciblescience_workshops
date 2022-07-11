@@ -104,5 +104,5 @@ all_ref_dates <- tibble(
                        ref_date + 90,
                        ref_date - 5000,
                        ref_date + 5000))
-knitr::kable(all_ref_dates) %>% kableExtra::kable_material()
+knitr::kable(all_ref_dates) %>% kableExtra::kable_material_dark()
 ```

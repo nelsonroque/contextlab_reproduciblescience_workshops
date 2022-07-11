@@ -17,7 +17,7 @@ library(qualtRics)
 library(tidyverse)
 
 # set filename of survey file
-fn = "data/demo_qualtrics_export.csv"
+fn = "../data/demo_qualtrics_export.csv"
 
 # filter out pilot data
 PILOT_START_DATE = as.Date("2022-06-21")
@@ -31,9 +31,12 @@ qualtrics_df <- read_survey(fn) %>%
 ## Split demographics into seperate dataset
 ```{r}
 df_demo = qualtrics_df %>%
-select(ResponseId, contains("demo"))
+select(ResponseId, contains("demo"), -contains("timer"))
 
 knitr::kable(df_demo) %>% kableExtra::kable_paper(.)
+knitr::kable(df_demo) %>% kableExtra::kable_material(.)
+
+knitr::kable(df_demo) %>% kableExtra::kable_material_dark(.)
 ```
 
 ## Split out survey metadata

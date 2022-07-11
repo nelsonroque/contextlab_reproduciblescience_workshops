@@ -58,6 +58,7 @@ state.x77
 # filter for US
 google_mobility_US <- google_mobility %>%
   filter(country_region == "United States") %>%
+  # filter(country_region %in% c("United States", "United Arab Emirates")) %>%
   mutate(dt_date = date) %>%
   mutate(dt_month = lubridate::month(dt_date),
          dt_month_ = lubridate::month(dt_date, label=T),
@@ -103,12 +104,44 @@ google_mobility_US_NY <- google_mobility_US %>%
 google_mobility_US_FL <- google_mobility_US %>%
   filter(sub_region_1 == "Florida")
 
+google_mobility_US_neFL <- google_mobility_US %>%
+  filter(sub_region_1 != "Florida")
+
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # filter to a 'vector' of entries
 google_mobility_US_targeted <- google_mobility_US %>%
-  filter(sub_region_1 %in% c("California", "New York", "Florida"))
+  filter(sub_region_1 %in% c("California", "New York", "Florida", "Alaska", "Texas"))
 
+```
+
+## Compare states
+```{r}
+library(ggstatsplot)
+ggbetweenstats(
+  data  = google_mobility_US_targeted,
+  x     = sub_region_1,
+  y     = retail_and_recreation_percent_change_from_baseline,
+  title = "Distribution of retail change across states"
+)
+```
+
+```{r}
+grouped_ggbetweenstats(
+  data  = google_mobility_US_targeted,
+  x     = sub_region_1,
+  y     = retail_and_recreation_percent_change_from_baseline,
+  grouping.var     = dt_weekend,
+  outlier.tagging  = TRUE,
+  #outlier.label    = title,
+  outlier.coef     = 2,
+  ggsignif.args    = list(textsize = 4, tip_length = 0.01),
+  p.adjust.method  = "bonferroni",
+  palette          = "default_jama",
+  package          = "ggsci",
+  plotgrid.args    = list(nrow = 1),
+  annotation.args  = list(title = "Differences in retail change by state for different days of week")
+)
 ```
 
 ## Compute aggregates
@@ -133,7 +166,7 @@ records_per_state
 
 # group data by weekday
 metrics_month_weekend_US <- google_mobility_US %>%
-  group_by(sub_region_1, dt_year, dt_month_, dt_wkday_l) %>%
+  group_by(sub_region_1, dt_year, dt_month_) %>%
   summarise(avg_change_parks = mean(parks_percent_change_from_baseline, na.rm=T),
             avg_change_retail_rec = mean(retail_and_recreation_percent_change_from_baseline, na.rm=T),
             avg_change_workplaces = mean(workplaces_percent_change_from_baseline, na.rm=T)) %>%
@@ -145,7 +178,8 @@ metrics_month_weekend_US <- google_mobility_US %>%
 ```{r}
 
 # plot summary data across all states
-allUS_retail = ggplot(metrics_month_weekend_US %>% filter(us_region %in% c("South", "West")), aes(sub_region_1, avg_change_retail_rec)) +
+allUS_retail = ggplot(metrics_month_weekend_US %>% 
+                        filter(us_region %in% c("South", "West")), aes(sub_region_1, avg_change_retail_rec)) +
   geom_boxplot() +
   theme_minimal() +
   theme(axis.text.x=element_text(angle=90)) +
@@ -353,7 +387,8 @@ fig2 <- ggplot(early_covid_period_data, aes(dt_date,
        title = "Google Mobility: Change over Time",
        subtitle = "i.e., Parks, early COVID-19 period (01/20 - 06/20)",
        caption = "Google Mobility: Parks (% Change) over early COVID period (01/20 - 06/20)") +
-  theme_bw(base_size = 12, base_family = "Arial")
+  theme_bw(base_size = 12, base_family = "Arial") +
+  scale_color_viridis_d()
 fig1
 fig2
 ```
@@ -369,15 +404,15 @@ largest_changes_parks_long <- google_mobility_US %>%
 largest_changes_parks_wide <- largest_changes_parks_long %>%
   #pivot_wider(id_cols=c())
   pivot_wider(names_from = dt_year, values_from = avg_change_parks) %>%
-  mutate(change_2021_2020 = `2021` - `2020`)
+  mutate(change_2022_2020 = `2022` - `2020`)
 
 top10_changes <- largest_changes_parks_wide %>%
-  arrange(-change_2021_2020) %>%
-  head(n=10)
+  arrange(-change_2022_2020) %>%
+  head(n=4)
 
 bottom10_changes <- largest_changes_parks_wide %>%
-  arrange(change_2021_2020) %>%
-  head(n=10)
+  arrange(change_2022_2020) %>%
+  head(n=4)
 
 largest_changes_parks_long
 largest_changes_parks_wide
