@@ -130,9 +130,10 @@ knitr::kable(head(section_fr_2_tf_idf))# %>% kableExtra::kable_paper(.)
 ```{r}
 
 # vis tf_idf ----
+n = 6
 section_fr_1_tf_idf %>%
   group_by(category) %>%
-  slice_max(tf_idf, n = 3) %>%
+  slice_max(tf_idf, n = n) %>%
   ungroup() %>%
   ggplot(aes(tf_idf, fct_reorder(word1, tf_idf), fill = category)) +
   geom_col(show.legend = FALSE) +
@@ -141,7 +142,7 @@ section_fr_1_tf_idf %>%
 
 section_fr_2_tf_idf %>%
   group_by(label) %>%
-  slice_max(tf_idf, n = 3) %>%
+  slice_max(tf_idf, n = n) %>%
   ungroup() %>%
   ggplot(aes(tf_idf, fct_reorder(word1, tf_idf), fill = label)) +
   geom_col(show.legend = FALSE) +
@@ -151,12 +152,17 @@ section_fr_2_tf_idf %>%
 ```
 
 ## Generate a wordcloud
+
+`min.freq`: words with frequency below min.freq will not be plotted
+`max.words`: Maximum number of words to be plotted. least frequent terms dropped
+
 ```{r}
+max_words = 50
 # https://towardsdatascience.com/create-a-word-cloud-with-r-bde3e7422e8a
 wordcloud::wordcloud(words = section_fr_1_tf_idf %>% pull(word1),
                      freq = section_fr_1_tf_idf %>% pull(n),
-                     min.freq = 300,
-                     max.words=200,
+                     min.freq = 50,
+                     max.words=max_words,
                      random.order=FALSE,
                      rot.per=0.1)
 
@@ -173,7 +179,7 @@ wordcloud::wordcloud(words = section_fr_1_tf_idf %>% pull(word1),
 
 [Source code](https://bookdown.org/mpfoley1973/data-sci/sentiment-analysis.html)
   
-```
+```{r}
 
 x1 <- get_sentiments(lexicon = "nrc") %>%
   count(sentiment) %>%
@@ -199,7 +205,7 @@ ggplot(x, aes(x = fct_reorder(sentiment, n), y = n, fill = lexicon)) +
 
 ```
 
-```
+```{r}
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -227,7 +233,7 @@ count_words_by_sent = sent_words %>%
 
 ## Visualize sentiment
 
-```
+```{r}
 ggplot(count_words_by_sent, aes(value, n_cut)) +
   geom_tile() +
   facet_grid(.~category)
@@ -252,8 +258,9 @@ cowplot::plot_grid(mv, sv, ncol=2)
 ---
 
 ## Topic modeling analysis
-Coming soon!
 Resource: https://www.tidytextmining.com/topicmodeling.html
+
+Example paper: https://www.sciencedirect.com/science/article/pii/S0010027714002261
 
 ```{r}
 
