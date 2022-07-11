@@ -18,6 +18,9 @@ Always consider the data processing implications of your data source. Depending 
 ## Overview
 For this example, we will work with product review data from the following open science resource: [https://osf.io/tyue9](https://osf.io/tyue9)
 
+Excerpt from article:
+"We show that a machine classifier can accomplish this goal near-perfectly, whereas human raters exhibit significantly lower accuracy and agreement than the tested algorithms. The model was also effective on detected human generated fake reviews. The results imply that, while fake review detection is challenging for humans, “machines can fight machines” in the task of detecting fake reviews."
+
 Salminen, J., Kandpal, C., Kamel, A. M., Jung, S., & Jansen, B. J. (2022). Creating and detecting fake reviews of online products. Journal of Retailing and Consumer Services, 64, 102771. https://doi.org/10.1016/j.jretconser.2021.102771
 
 ## Load Libs
@@ -35,7 +38,7 @@ library(ggwordcloud)
 ``` {r}
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-df <- readr::read_csv("data/fake reviews dataset.csv") %>%
+df <- readr::read_csv("../data/fake reviews dataset.csv") %>%
   mutate(id = row_number()) %>% # add row id
   select(id, category, everything()) %>%
   mutate(text_clean = stringr::str_replace_all(text_, "[^[:alnum:]]", " "))
