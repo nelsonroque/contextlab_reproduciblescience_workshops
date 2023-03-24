@@ -17,11 +17,21 @@ library(tidyverse)
 
 ```
 
+```{r}
+is_workshop = T
+```
+
 ## Read in data
 ```{r}
-# read in the Google Mobility dataset
-google_mobility <- read_csv("https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv")
-# ~ 700MB AND 7MIN (LAST UPDATED: 07/07/2022)
+
+if(!is_workshop) {
+  # read in the Google Mobility dataset
+  google_mobility <- read_csv("https://www.gstatic.com/covid19/mobility/Global_Mobility_Report.csv")
+  # ~ 700MB AND 7MIN (LAST UPDATED: 07/07/2022)
+} else {
+  load("gmd.RData")
+}
+
 ```
 
 ## Inspect dataset features
@@ -381,7 +391,7 @@ fig2 <- ggplot(early_covid_period_data, aes(dt_date,
   #geom_jitter() +
   geom_smooth() +
   facet_wrap(.~sub_region_1) +
-  labs(x= "Date", y="Retail & Recreation (% Change)",
+  labs(x= "Date", y="Parks (% Change)",
        #color="State",
        tag = "Figure 2",
        title = "Google Mobility: Change over Time",

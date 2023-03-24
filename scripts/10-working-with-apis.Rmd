@@ -44,5 +44,5 @@ results_df = bind_rows(results)
 ```{r}
 library(knitr)
 library(kableExtra)
-knitr::kable(results_df)# %>% kableExtra::kable_minimal(.)
+knitr::kable(results_df, table.attr = "style = \"color: black;\"") %>% kableExtra::kable_minimal(.)
 ```

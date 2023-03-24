@@ -2,3 +2,5 @@
 .DS_Store
 scripts/.Rhistory
 data/fake reviews dataset.csv
+.Rproj.user
+*.RData
